@@ -36,7 +36,8 @@ def get_linear_r2(x, y):
     model.fit(x, y)
     r2 = model.score(x, y)
     # st.write(f'\nlinear: r2 = {np.round(r2, 2)}\n')
-    st.markdown(f''':blue[value of r2 from linear regression is] :red[{np.round(r2, 2)}]''')
+    # st.markdown(f''':blue[value of r2 from linear regression is] :red[{np.round(r2, 2)}]''')
+    return f''':blue[value of r2 from linear regression is] :red[{np.round(r2, 2)}]'''
 
 
 def plot_res(x, y, degree):
@@ -64,8 +65,9 @@ def get_poly_r2(x, y, degree):
     # Plot
     plot_res(x, y, degree)
 
-    st.markdown(f''':blue[polynomial feature of degree is {degree} and value of r2 from regression is] :red[{np.round(r2, 2)}]''')
+    # st.markdown(f''':blue[polynomial feature of degree is {degree} and value of r2 from regression is] :red[{np.round(r2, 2)}]''')
     # st.write(f'\npoly {degree}: r2 = {np.round(r2, 2)}\n')
+    return f''':blue[polynomial feature of degree is {degree} and value of r2 from regression is] :red[{np.round(r2, 2)}]'''
 
 
 def get_grad_boost_r2(x, y):
@@ -231,9 +233,11 @@ def get_regression_vals(a, b, c, d):
     x = df3a['size'].values
     y= df3a['cost'].values
 
-    get_linear_r2(x,y)
+    res1 = get_linear_r2(x,y)
 
-    get_poly_r2(x,y, 3)
+    res2  = get_poly_r2(x,y, 3)
+    st.write(res1)
+    st.write(res2)
 
     # get_grad_boost_r2(x,y)
     # get_hist_grad_boost_r2(x, y)
