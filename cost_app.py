@@ -35,18 +35,25 @@ def get_linear_r2(x, y):
     model = LinearRegression()
     model.fit(x, y)
     r2 = model.score(x, y)
-    st.write(f'\nlinear: r2 = {r2}\n')
+    # st.write(f'\nlinear: r2 = {np.round(r2, 2)}\n')
+    st.markdown(f''':blue[value of r2 from linear regression is] :red[{np.round(r2, 2)}]''')
 
-def get_poly_r2_2(x, y, degree):
-    x = x.reshape(-1, 1)
-    y = y.reshape(-1, 1)
+
+def plot_res(x, y, degree):
+    plt.scatter(x, y, color='blue', label='Original data', alpha=0.6)
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2) 
-    model = make_pipeline(PolynomialFeatures(degree=degree), LinearRegression())
+    model = make_pipeline(PolynomialFeatures(degree=2), LinearRegression())
     model.fit(X_train, y_train)
-    r2 = model.score(x, y)
-    # Plot
-    y_pred = model.predict(X_test)   
-    st.write(f'\npoly {degree}: r2 = {r2}\n')
+    y_pred = model.predict(X_test)
+    plt.plot(X_test, y_pred, color='red', label=f'Polynomial (degree={degree})', linewidth=2)
+    plt.title(f'Polynomial Regression (degree={degree})')
+    plt.xlabel('X')
+    plt.ylabel('y')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+    st.pyplot(plt)
 
 def get_poly_r2(x, y, degree):
     x = np.log(x.reshape(-1, 1))
@@ -55,7 +62,10 @@ def get_poly_r2(x, y, degree):
     model.fit(x, y)
     r2 = model.score(x, y)
     # Plot
-    st.write(f'\npoly {degree}: r2 = {r2}\n')
+    plot_res(x, y, degree)
+
+    st.markdown(f''':blue[polynomial feature of degree is {degree} and value of r2 from regression is] :red[{np.round(r2, 2)}]''')
+    # st.write(f'\npoly {degree}: r2 = {np.round(r2, 2)}\n')
 
 
 def get_grad_boost_r2(x, y):
@@ -66,7 +76,7 @@ def get_grad_boost_r2(x, y):
     gbr = GradientBoostingRegressor(n_estimators=100, learning_rate=0.01, max_depth=5)# Initialize the model
     gbr.fit(X_train, y_train)# Train the model
     y_pred = gbr.predict(X_test)# Predict
-    st.write(f"grs boost: R² Score:", r2_score(y_test, y_pred))# Evaluate
+    st.bold(f"grs boost: R² Score:", r2_score(y_test, y_pred))# Evaluate
 
 
 def get_hist_grad_boost_r2(x, y):
@@ -175,8 +185,8 @@ def process_dataframe():
 
 
 def get_constants():
-    a= 6
-    b = 10
+    a = 6
+    b = 9
     c = 1
     d = 5
     return (a, b, c, d)
@@ -200,15 +210,15 @@ def process_constants():
 
 
 def get_regression_vals(a, b, c, d):
+    st.write(f'Ranges: min cost {np.power(10, a)}, max cost: {np.power(10, b)}, min size : {np.power(10, c)}, max size: {np.power(10, d)}')
     (costs, sizes, disc, curr, costName, country, city) = process_dataframe()
-
     r_costs=[]
     r_sizes=[]
     i=0
     while i< len(costs):
         if costs[i] > np.power(10, a) and costs[i] < np.power(10, b):
             if sizes[i] > np.power(10, c) and sizes[i] < np.power(10, d):
-                if disc[i] == 'AI' and curr[i] == 'USD' and costName[i]=='Construction':
+                if disc[i] == 'AI' and curr[i] == 'USD' and costName[i]==cost_name_opt:
                     if country[i] == 'United States of America' or country[i] == 'US':
                         r_costs.append(costs[i])
                         r_sizes.append(sizes[i])
@@ -227,15 +237,14 @@ def get_regression_vals(a, b, c, d):
 
     # get_grad_boost_r2(x,y)
     # get_hist_grad_boost_r2(x, y)
-
     # random_forest_r2(x, y)
 
     print('over...')
 
 
 def driver():
-    # costs = 1.0, 6_300_000_000.0
-    # sizes = 1.5,    21_527_821.0
+    # costs = 1.0,      6_300_000_000.0
+    # sizes = 1.5,      21_527_821.0
 
     try:
         (a, b, c, d) = process_constants()
@@ -245,9 +254,7 @@ def driver():
         st.write(f'error in constraints, using {a, b, c, d}')
         get_regression_vals(a, b, c, d)
     
-
-
-
+cost_name_opt = st.selectbox('select a Cost Name?',('Construction', 'Construction Cost', 'Total', 'Design', 'Project Cost'))
 constant_a = st.slider("constraint a", min_value=1, max_value=11, value=6, step=1, key=1, on_change=None, disabled=False, label_visibility="visible")
 constant_b = st.slider("constraint b", min_value=1, max_value=11, value=10, step=1, key=2, on_change=None, disabled=False, label_visibility="visible")
 constant_c = st.slider("constraint c", min_value=1, max_value=11, value=1, step=1, key=3, on_change=None, disabled=False, label_visibility="visible")
