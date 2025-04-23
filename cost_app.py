@@ -210,7 +210,7 @@ def process_constants():
 
 
 def get_regression_vals(a, b, c, d):
-    st.write(f'Ranges: min cost {np.power(10, a)}, max cost: {np.power(10, b)}, min size : {np.power(10, c)}, max size: {np.power(10, d)}')
+    # st.write(f'Ranges: min cost {np.power(10, a)}, max cost: {np.power(10, b)}, min size : {np.power(10, c)}, max size: {np.power(10, d)}')
     (costs, sizes, disc, curr, costName, country, city) = process_dataframe()
     r_costs=[]
     r_sizes=[]
@@ -226,7 +226,7 @@ def get_regression_vals(a, b, c, d):
     
     n_costs = len(r_costs)
     n_sizes = len(r_sizes)
-    st.write(f"num samples = {n_costs}, {n_sizes}")
+    # st.write(f"num samples = {n_costs}, {n_sizes}")
     df3a = pd.DataFrame({'cost': r_costs, 'size': r_sizes})
     x = df3a['size'].values
     y= df3a['cost'].values
