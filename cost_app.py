@@ -204,7 +204,7 @@ def process_constants():
     if c >= d:
         c = d-1000
 
-    st.write(f'processing constraints {a, b, c, d}')
+    #  st.write(f'processing constraints {a, b, c, d}')
     return a, b, c, d
 
 
@@ -239,7 +239,7 @@ def get_regression_vals(a, b, c, d):
     # get_hist_grad_boost_r2(x, y)
     # random_forest_r2(x, y)
 
-    print('over...')
+    # print('over...')
 
 
 def driver():
@@ -251,7 +251,7 @@ def driver():
         get_regression_vals(a, b, c, d)
     except:
         (a, b, c, d) = get_constants()
-        st.write(f'error in constraints, using {a, b, c, d}')
+        #st.write(f'error in constraints, using {a, b, c, d}')
         get_regression_vals(a, b, c, d)
     
 cost_name_opt = st.selectbox('select a Cost Name?',('Construction', 'Construction Cost', 'Total', 'Design', 'Project Cost'))
