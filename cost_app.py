@@ -24,11 +24,8 @@ from sklearn.metrics import r2_score
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import HistGradientBoostingRegressor
 
-
 st.title= 'cost app'
-offset=0.0434
 
-FILENAME = ['cost_size_isolated.csv', 'normalized_data_for_regression.csv']
 
 def get_linear_r2(x, y):
     x = np.log(x.reshape(-1, 1))
@@ -38,7 +35,7 @@ def get_linear_r2(x, y):
     r2 = model.score(x, y)
     # st.write(f'\nlinear: r2 = {np.round(r2, 2)}\n')
     # st.markdown(f''':blue[value of r2 from linear regression is] :red[{np.round(r2, 2)}]''')
-    return f''':blue[value of r2 from linear regression is] :red[{np.round(r2, 2) + offset}]'''
+    return f''':blue[value of r2 from linear regression is] :red[{np.round(r2, 2)}]'''
 
 
 def plot_res(x, y, degree):
@@ -49,8 +46,8 @@ def plot_res(x, y, degree):
     y_pred = model.predict(X_test)
     plt.plot(X_test, y_pred, color='red', label=f'Polynomial (degree={degree})', linewidth=2)
     plt.title(f'Polynomial Regression (degree={degree})')
-    plt.xlabel('X')
-    plt.ylabel('y')
+    plt.xlabel('project size')
+    plt.ylabel('project cost')
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -68,7 +65,7 @@ def get_poly_r2(x, y, degree):
 
     # st.markdown(f''':blue[polynomial feature of degree is {degree} and value of r2 from regression is] :red[{np.round(r2, 2)}]''')
     # st.write(f'\npoly {degree}: r2 = {np.round(r2, 2)}\n')
-    return f''':blue[polynomial feature of degree is {degree} and value of r2 from regression is] :red[{np.round(r2, 2) + offset}]'''
+    return f''':blue[polynomial feature of degree is {degree} and value of r2 from regression is] :red[{np.round(r2, 2)}]'''
 
 
 def get_grad_boost_r2(x, y):
@@ -208,6 +205,7 @@ def process_constants():
         c = d-1000
 
     #  st.write(f'processing constraints {a, b, c, d}')
+
     return a, b, c, d
 
 
@@ -229,7 +227,8 @@ def get_regression_vals(a, b, c, d):
     
     n_costs = len(r_costs)
     n_sizes = len(r_sizes)
-    # st.write(f"num samples = {n_costs}, {n_sizes}")
+    
+    st.write(f"num samples = {n_costs}")
     df3a = pd.DataFrame({'cost': r_costs, 'size': r_sizes})
     x = df3a['size'].values
     y= df3a['cost'].values
@@ -243,9 +242,7 @@ def get_regression_vals(a, b, c, d):
     # get_grad_boost_r2(x,y)
     # get_hist_grad_boost_r2(x, y)
     # random_forest_r2(x, y)
-
     # print('over...')
-
 
 def driver():
     # costs = 1.0,      6_300_000_000.0
@@ -258,7 +255,11 @@ def driver():
         (a, b, c, d) = get_constants()
         #st.write(f'error in constraints, using {a, b, c, d}')
         get_regression_vals(a, b, c, d)
-    
+
+
+FILENAME = ['cost_size_isolated.csv', 'normalized_data_for_regression.csv']
+
+
 cost_name_opt = st.selectbox('select a Cost Name?',('Construction', 'Construction Cost', 'Total', 'Design', 'Project Cost'))
 constant_a = st.slider("constraint a", min_value=1, max_value=11, value=6, step=1, key=1, on_change=None, disabled=False, label_visibility="visible")
 constant_b = st.slider("constraint b", min_value=1, max_value=11, value=10, step=1, key=2, on_change=None, disabled=False, label_visibility="visible")
